@@ -29,7 +29,7 @@ pipeline {
         }
 
 
-         stage('Build Backend Image') {
+         stage('Build Frontend Image') {
             steps {
                 bat "docker build -t ${DOCKERHUB_USER}/${FRONTEND_IMAGE}:${IMAGE_TAG} ./frontend"
             }
