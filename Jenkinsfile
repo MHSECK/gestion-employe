@@ -1,5 +1,5 @@
 pipeline {
-    // deploiement ci-cd mono-repo
+    // deploiement ci-cd mono-repoooo
     // agent any
 
     agent {
