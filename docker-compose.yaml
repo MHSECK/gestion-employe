@@ -2,7 +2,7 @@
 services:
 
   # -------------------------------
-  # PostgreSQL 17
+  # PostgreSQL version 17
   # -------------------------------
   db-service:
     image: postgres:17
