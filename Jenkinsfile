@@ -61,7 +61,7 @@ pipeline {
 
     post {
         success {
-            echo "Déploiement Backend et Frontend Gestion employé réussi !"
+            echo "Déploiement automatique via webhook réussi !"
         }
         failure {
             echo "Le déploiement a échoué, vérifiez les logs Jenkins."
