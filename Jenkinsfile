@@ -8,7 +8,7 @@ pipeline {
     }
 
     environment {
-        DOCKERHUB_USER = "ditdevops1"
+        DOCKERHUB_USER = "mhseck"
         BACKEND_IMAGE  = "backend-employe"
         FRONTEND_IMAGE = "frontend-employe"
         IMAGE_TAG      = "1.${BUILD_NUMBER}"
