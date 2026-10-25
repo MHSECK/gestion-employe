@@ -1,7 +1,7 @@
 // Service pour gérer les employés via l'API backend
 class EmployeService {
   constructor() {
-    this.apiUrl = 'http://localhost:8000/api/employes/'; // URL backend API gestion des employés
+    this.apiUrl = '/api/employes/'; // URL relative : redirigee vers le backend par src/setupProxy.js
   }
 
   // Récupérer tous les employéss

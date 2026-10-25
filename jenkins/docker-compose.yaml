@@ -1,0 +1,37 @@
+# Infra CI/CD : Jenkins + tunnel ngrok (webhook GitHub -> Jenkins)
+name: cicd
+
+services:
+
+  # -------------------------------
+  # Jenkins
+  # -------------------------------
+  jenkins:
+    build: .
+    container_name: jenkins
+    # root pour acceder au socket Docker du Mac (OK pour un usage local)
+    user: root
+    ports:
+      - "8080:8080"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+
+  # -------------------------------
+  # ngrok : expose Jenkins sur Internet pour GitHub
+  # -------------------------------
+  ngrok:
+    image: ngrok/ngrok:3
+    container_name: ngrok
+    command: http jenkins:8080 --url=${NGROK_DOMAIN}
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+    ports:
+      - "4040:4040"   # interface d'inspection : http://localhost:4040
+    depends_on:
+      - jenkins
+    restart: always
+
+volumes:
+  jenkins_home:

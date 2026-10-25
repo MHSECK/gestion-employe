@@ -11,7 +11,8 @@ os.environ['PGCLIENTENCODING'] = 'UTF8'
 # SQLALCHEMY_DATABASE_URL = "postgresql://admin:admin123@localhost:5432/dbdit"
 
 # Postgres conteneurise
-SQLALCHEMY_DATABASE_URL = "postgresql://admin:admin123@postgres_server:5432/dbdit"
+# DATABASE_URL est fourni par docker-compose ; valeur par defaut pour le dev local
+SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://admin:admin123@postgres_server:5432/dbdit")
 
 #  PostgreSQL  en deploiement avec Docker Compose
 # SQLALCHEMY_DATABASE_URL = "postgresql://admin:admin123@db-service:5432/dbemploye"
