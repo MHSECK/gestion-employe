@@ -34,6 +34,7 @@ pipeline {
             }
         }
 
+
         // push images to DockerHub
         stage('Push to Docker Hub') {
             steps {
