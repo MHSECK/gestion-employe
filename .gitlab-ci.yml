@@ -54,6 +54,7 @@ deploy:
     name: production
     url: http://localhost:3000
   script:
+    # projet "employe" = celui de Jenkins, pour reutiliser le volume employe_devnestdata
     # docker-compose.yaml attend BUILD_NUMBER (images en 1.${BUILD_NUMBER})
     - export BUILD_NUMBER="$CI_PIPELINE_IID"
-    - docker compose -p gestion-employe up -d
+    - docker compose -p employe up -d
