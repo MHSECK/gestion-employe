@@ -1,0 +1,59 @@
+# CI/CD mono-repo avec GitLab : build -> push Docker Hub -> deploiement sur le Mac
+#
+# Tous les jobs tournent sur un GitLab Runner installe sur le Mac
+# (executor "shell", tag "mac"), qui utilise directement le Docker du Mac.
+# Le runner interroge GitLab lui-meme : plus besoin de webhook ni de ngrok.
+#
+# Variables a creer dans GitLab (Settings > CI/CD > Variables) :
+#   DOCKERHUB_USER   = mhseck
+#   DOCKERHUB_TOKEN  = access token Docker Hub (masquee)
+
+stages:
+  - build
+  - push
+  - deploy
+
+variables:
+  BACKEND_IMAGE: "backend-employe"
+  FRONTEND_IMAGE: "frontend-employe"
+  # equivalent du 1.${BUILD_NUMBER} de Jenkins
+  IMAGE_TAG: "1.${CI_PIPELINE_IID}"
+
+default:
+  tags:
+    - mac
+  before_script:
+    # Docker Desktop n'est pas toujours dans le PATH du runner
+    - export PATH="$HOME/.docker/bin:/usr/local/bin:/opt/homebrew/bin:$PATH"
+
+# pipeline uniquement sur la branche par defaut (master)
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+build-backend:
+  stage: build
+  script:
+    - docker build -t "$DOCKERHUB_USER/$BACKEND_IMAGE:$IMAGE_TAG" ./backend
+
+build-frontend:
+  stage: build
+  script:
+    - docker build -t "$DOCKERHUB_USER/$FRONTEND_IMAGE:$IMAGE_TAG" ./frontend
+
+push-dockerhub:
+  stage: push
+  script:
+    - echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USER" --password-stdin
+    - docker push "$DOCKERHUB_USER/$BACKEND_IMAGE:$IMAGE_TAG"
+    - docker push "$DOCKERHUB_USER/$FRONTEND_IMAGE:$IMAGE_TAG"
+
+deploy:
+  stage: deploy
+  environment:
+    name: production
+    url: http://localhost:3000
+  script:
+    # docker-compose.yaml attend BUILD_NUMBER (images en 1.${BUILD_NUMBER})
+    - export BUILD_NUMBER="$CI_PIPELINE_IID"
+    - docker compose -p gestion-employe up -d
