@@ -1,7 +1,7 @@
 # CI/CD mono-repo avec GitLab : build -> push Docker Hub -> deploiement sur le Mac
 #
 # Tous les jobs tournent sur un GitLab Runner installe sur le Mac
-# (executor "shell", tag "mac"), qui utilise directement le Docker du Mac.
+# (executor "shell", tag "macos"), qui utilise directement le Docker du Mac.
 # Le runner interroge GitLab lui-meme : plus besoin de webhook ni de ngrok.
 #
 # Variables a creer dans GitLab (Settings > CI/CD > Variables) :
@@ -21,7 +21,7 @@ variables:
 
 default:
   tags:
-    - mac
+    - macos
   before_script:
     # Docker Desktop n'est pas toujours dans le PATH du runner
     - export PATH="$HOME/.docker/bin:/usr/local/bin:/opt/homebrew/bin:$PATH"
